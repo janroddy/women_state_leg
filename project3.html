@@ -2,13 +2,11 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Percent women in U.S. State Legislatures</title>
-		<script type="text/javascript" src="../d3.js"></script>
+		<title>D3: Setting path fills dynamically to generate a choropleth</title>
+		<script type="text/javascript" src="d3.js"></script> 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-
-		
-		<style type="text/css">	
+		<style type="text/css">
 			.states {
     	stroke: #fff;
 		  stroke-width:1px;
@@ -17,59 +15,44 @@
 		  stroke: #ff9933;
 		  stroke-width:1px;
 		}
-		
 		</style>
-
 	</head>
 	<body>
+
+			<body>
 		<h2>Hypothesis: The percentage of women in U.S. state legislatures has increased since the general election in 2016.</h2>
-		<h1>Women in State Leg</h1>
+		<h1>Women in State Legislatures 2017</h1>
 
 
 
 		<script type="text/javascript">
 
 			//Width and height
-			var w = 500;
-			var h = 300;
+			var w = 600;
+			var h = 400;
 
 			//Define map projection
 			var projection = d3.geoAlbersUsa()
-				.translate([w/2, h/2])
-				.scale([500]);
+								   .translate([w/2-80, h/2-80])
+								   .scale([500]);
 
 			//Define path generator
 			var path = d3.geoPath()
 							 .projection(projection);
-		/*	//old color scale				 
-			//Define color and scale 
+							 
+			//Define quantize scale to sort data values into buckets of color
+			/*
+
 			var color = d3.scaleThreshold()
-  				.domain([15, 20, 25, 30])
-  				.range(d3.schemeBlues[5]);	
-	
-		*/
-	//Define color and scale 
+  				.domain([.5, .6, .7, .8, .9, 1, 1.2, 1.3, 1.5])
+  				.range(d3.schemeBlues[9]);
+								//Colors derived from ColorBrewer, by Cynthia Brewer, and included in
+								//https://github.com/d3/d3-scale-chromatic
+	*/
 			var color = d3.scaleQuantize()
   				.domain([15, 20, 25, 30, 35, 40])
   				.range(d3.schemeBlues[7]);	
-
-/*
-  		var colorLegend = d3.legend.color()
-        .labelFormat(d3.format(".0f"))
-        .scale(color)
-        .shapePadding(5)
-        .shapeWidth(50)
-        .shapeHeight(20)
-        .labelOffset(12);
-
-      svg.append("g")
-        .attr("transform", "translate(352, 60)")
-        .call(colorLegend);
-
-
-*/
-
-
+					
 
 			//Create SVG element
 			var svg = d3.select("body")
@@ -77,41 +60,43 @@
 						.attr("width", w)
 						.attr("height", h);
 
-			//Load in data
-			d3.csv("women_state_leg.csv", function(data) {
-				for (var i = 0; i < data.length; i++) {
-        console.log("state: " +data[i].state);
-        console.log("value: " + data[i].value);
 
-    }
+
+
+
+			var colorLegend = d3.legendColor()
+        .labelFormat(d3.format(".0f"))
+        .scale(color)
+        .shapePadding(5)
+        .shapeWidth(50)
+        .shapeHeight(20)
+        .labelOffset(12);
+      svg.append("g")
+        .attr("transform", "translate(440, 60)")
+        .call(colorLegend);		
+
+
+
+
+
+			//Load in agriculture data
+			d3.csv("women_state_leg.csv", function(data) {
+
 				//Set input domain for color scale
 				color.domain([
 					d3.min(data, function(d) { return d.value; }), 
 					d3.max(data, function(d) { return d.value; })
 				]);
 
-
-
-
-
-
-
-
-
-
-
 				//Load in GeoJSON data
 				d3.json("us-states.json", function(json) {
 
-					//Merge the legislature data and GeoJSON
-					//Loop through once for each legislature data value
+					//Merge the ag. data and GeoJSON
+					//Loop through once for each ag. data value
 					for (var i = 0; i < data.length; i++) {
-					//	console.log(data);
-		
+				
 						//Grab state name
-					//	console.log(data[i].state);
 						var dataState = data[i].state;
-					//	console.log(dataState);
 	
 						
 						//Grab data value, and convert from string to float
@@ -136,14 +121,12 @@
 
 					//Bind data and create one path per GeoJSON feature
 					svg.selectAll("path")
-				   .data(json.features)
-				   .enter()
-				   .append("path")
-				   .attr('class', 'states')
-				   .attr("d", path)
-				//   .on('mouseover', tip.show)
-      	//	 .on('mouseout', tip.hide)
-				   .style("fill", function(d) {
+					   .data(json.features)
+					   .enter()
+					   .append("path")
+					   .attr("d", path)
+					   .attr('class', 'states')
+					   .style("fill", function(d) {
 					   		//Get data value
 					   		var value = d.properties.value;
 					   		
@@ -154,24 +137,14 @@
 					   			//If value is undefined…
 						   		return "#ccc";
 					   		}
-
-
 					   });
 			
-
-
-
 				});
 			
 			});
 			
 		</script>
 
-		<p>Data Source: <a href="http://www.ncsl.org/legislators-staff/legislators/womens-legislative-network.aspx">National Conference of State Legislatures</a>
- </p>
-
-
-
-
+		<p>Data Source: <a href="http://www.ncsl.org/legislators-staff/legislators/womens-legislative-network.aspx">National Conference of State Legislatures</a></p>
 	</body>
 </html>
