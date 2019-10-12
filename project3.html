@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>D3: Setting path fills dynamically to generate a choropleth</title>
+		<title>Women in State Legislatures</title>
 		<script type="text/javascript" src="d3.js"></script> 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
@@ -42,17 +42,15 @@
 							 
 			//Define quantize scale to sort data values into buckets of color
 			
-
-			var legColor = d3.scaleThreshold()
-  				.domain([])
-  				.range(d3.schemeBlues[9]);
+			var color = d3.scaleQuantize()
+	//		var color = d3.scaleThreshold()
+  				.domain([0, 10, 20, 30, 40, 50])
+  			//	.range(d3.interpolateBlues());
+  				.range(d3.schemeBlues[5]);
 								//Colors derived from ColorBrewer, by Cynthia Brewer, and included in
 								//https://github.com/d3/d3-scale-chromatic
 	
 	
-			var color = d3.scaleQuantize()
-  				.domain([0, 50])
-  				.range(d3.schemeBlues[7]);	
 					
 
 			//Create SVG element
@@ -60,10 +58,39 @@
 						.append("svg")
 						.attr("width", w)
 						.attr("height", h);
+  
+
+
+//Another take a legend
+
+var legend = d3.legendColor()
+    .shapeWidth(30)
+    .cells(10)
+    .orient("vertical")
+    .scale(color) 
+
+
+svg.append("g")
+ // .attr("class", "legendSequential")
+  .call(legend)
+  .attr("transform", "translate(440, 60)");  
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+///BAD LEGEND 
+
+/*
 
 			var colorLegend = d3.legendColor()
       //  .labelFormat(d3.format(".0f"))
@@ -77,7 +104,7 @@
         .attr("transform", "translate(440, 60)")
         .call(colorLegend);		
 
-
+*/
 
 
 
@@ -133,6 +160,7 @@
 					   .enter()
 					   .append("path")
 					   .attr("d", path)
+				//	   .attr("stroke-linejoin", "round")
 					   .attr('class', 'states')
 					   .style("fill", function(d) {
 					   		//Get data value
@@ -140,6 +168,7 @@
 					   		
 					   		if (value) {
 					   			//If value exists…
+
 					   			console.log("value: " + value);
 					   			console.log("color value: " + color(value));
 						   		return color(value);
