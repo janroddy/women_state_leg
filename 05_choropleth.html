@@ -41,17 +41,16 @@
 							 .projection(projection);
 							 
 			//Define quantize scale to sort data values into buckets of color
-			
+			/*
 
-			var legColor = d3.scaleThreshold()
-  				.domain([])
+			var color = d3.scaleThreshold()
+  				.domain([.5, .6, .7, .8, .9, 1, 1.2, 1.3, 1.5])
   				.range(d3.schemeBlues[9]);
 								//Colors derived from ColorBrewer, by Cynthia Brewer, and included in
 								//https://github.com/d3/d3-scale-chromatic
-	
-	
+	*/
 			var color = d3.scaleQuantize()
-  				.domain([0, 50])
+  				.domain([15, 20, 25, 30, 35, 40])
   				.range(d3.schemeBlues[7]);	
 					
 
@@ -66,13 +65,12 @@
 
 
 			var colorLegend = d3.legendColor()
-      //  .labelFormat(d3.format(".0f"))
+        .labelFormat(d3.format(".0f"))
         .scale(color)
         .shapePadding(5)
         .shapeWidth(50)
         .shapeHeight(20)
         .labelOffset(12);
-      
       svg.append("g")
         .attr("transform", "translate(440, 60)")
         .call(colorLegend);		
@@ -83,12 +81,6 @@
 
 			//Load in agriculture data
 			d3.csv("women_state_leg.csv", function(data) {
-
-
-				for (var i = 0; i < data.length; i++) {
-	        console.log("state: " +data[i].state);
-	        console.log("value: " + data[i].value);
-    		}
 
 				//Set input domain for color scale
 				color.domain([
@@ -140,10 +132,7 @@
 					   		
 					   		if (value) {
 					   			//If value exists…
-					   			console.log("value: " + value);
-					   			console.log("color value: " + color(value));
 						   		return color(value);
-
 					   		} else {
 					   			//If value is undefined…
 						   		return "#ccc";
