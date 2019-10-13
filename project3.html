@@ -21,19 +21,20 @@
 
 			<body>
 		<h2>Hypothesis: The percentage of women in U.S. state legislatures has increased since the general election in 2016.</h2>
-		<h1>Women in State Legislatures 2017</h1>
+		<h1>2017</h1>
 
 
 
 		<script type="text/javascript">
 
 			//Width and height
-			var w = 600;
+			var w = 700;
 			var h = 400;
+
 
 			//Define map projection
 			var projection = d3.geoAlbersUsa()
-								   .translate([w/2-80, h/2-80])
+								   .translate([w/2-120, h/2-80])
 								   .scale([500]);
 
 			//Define path generator
@@ -44,30 +45,37 @@
 			
 			var color = d3.scaleQuantize()
 	//		var color = d3.scaleThreshold()
-  				.domain([0, 10, 20, 30, 40, 50])
-  			//	.range(d3.interpolateBlues());
-  				.range(d3.schemeBlues[5]);
-								//Colors derived from ColorBrewer, by Cynthia Brewer, and included in
-								//https://github.com/d3/d3-scale-chromatic
-	
-	
-					
+  			//	.domain([0, 10, 20, 30, 40, 50])
+  				.domain([10, 40])
+   				.range(d3.schemeBlues[4]);
+						
 
-			//Create SVG element
+
+				  //Create SVG element
 			var svg = d3.select("body")
 						.append("svg")
 						.attr("width", w)
 						.attr("height", h);
-  
+ 
+
+
+
+
+
+
+
 
 
 //Another take a legend
 
 var legend = d3.legendColor()
-    .shapeWidth(30)
-    .cells(10)
+		.labelFormat(d3.format(".0f"))
+    .shapeWidth(20)
+    .cells(5)
+    .labels(["< 25%", "< 30%", "< 35%", "> 35%"])
+		.title("Women in State Legislatures (%)")
     .orient("vertical")
-    .scale(color) 
+    .scale(color)
 
 
 svg.append("g")
@@ -105,6 +113,39 @@ svg.append("g")
         .call(colorLegend);		
 
 */
+
+
+
+		var tooltip = d3.select("body").append("div") 
+        .attr("class", "tooltip")       
+        .style("opacity", 0)
+        .style("background-color", "white")
+      	.style("border", "solid")
+      	.style("border-width", "2px")
+      	.style("border-radius", "5px")
+      	.style("padding", "10px");
+
+
+
+      	 // Three function that change the tooltip when user hover / move / leave a cell
+      var mouseover = function(d) {
+        tooltip
+          .style("opacity", 1)
+      }
+      var mousemove = function(d) {
+        tooltip
+          .html( 
+          	(d.properties.name + " " + d.properties.value )
+          )
+    		}	
+      var mouseleave = function(d) {
+        tooltip
+          .style("opacity", 0)
+      }
+
+        
+
+
 
 
 
@@ -159,8 +200,11 @@ svg.append("g")
 					   .data(json.features)
 					   .enter()
 					   .append("path")
+					   .attr("fill", "#66ccff")
+			        .on("mouseover", mouseover)
+			        .on("mousemove", mousemove)
+			        .on("mouseleave", mouseleave)
 					   .attr("d", path)
-				//	   .attr("stroke-linejoin", "round")
 					   .attr('class', 'states')
 					   .style("fill", function(d) {
 					   		//Get data value
@@ -177,13 +221,44 @@ svg.append("g")
 					   			//If value is undefined…
 						   		return "#ccc";
 					   		}
-					   });
+
+					   	})
+
+		
+    
+
+					 
+
+
+	
+ 				});
+
+
+
 			
 				});
 			
-			});
 			
 		</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		<p>Data Source: <a href="http://www.ncsl.org/legislators-staff/legislators/womens-legislative-network.aspx">National Conference of State Legislatures</a></p>
 	</body>
