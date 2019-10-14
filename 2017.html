@@ -18,6 +18,7 @@
 		body {
 			 font-family: optima;
 
+
 		}
 		.tooltip {
 
@@ -30,7 +31,7 @@
 
 			<body>
 		<h2>Hypothesis: The percentage of women in U.S. state legislatures has increased since the general election in 2016.</h2>
-		<h1 style= "text-align: center;">2019</h1>
+		<h1>2017</h1>
 
 
 
@@ -81,8 +82,8 @@ var legend = d3.legendColor()
 		.labelFormat(d3.format(".0f"))
     .shapeWidth(20)
     .cells(5)
-    .labels(["< 25", "< 35", "< 45", "> 45"])
-		.title("Women in State Legislatures%")
+    .labels(["< 25%", "< 30%", "< 35%", "> 35%"])
+		.title("Women in State Legislatures (%)")
     .orient("vertical")
     .scale(color)
 
@@ -91,6 +92,37 @@ svg.append("g")
  // .attr("class", "legendSequential")
   .call(legend)
   .attr("transform", "translate(440, 60)");  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///BAD LEGEND 
+
+/*
+
+			var colorLegend = d3.legendColor()
+      //  .labelFormat(d3.format(".0f"))
+        .scale(color)
+        .shapePadding(5)
+        .shapeWidth(50)
+        .shapeHeight(20)
+        .labelOffset(12);
+      
+      svg.append("g")
+        .attr("transform", "translate(440, 60)")
+        .call(colorLegend);		
+
+*/
 
 
 
@@ -132,7 +164,7 @@ svg.append("g")
 
 
 			//Load in agriculture data
-			d3.csv("2019.csv", function(data) {
+			d3.csv("women_state_leg.csv", function(data) {
 
 
 				for (var i = 0; i < data.length; i++) {
