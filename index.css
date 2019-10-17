@@ -1,0 +1,28 @@
+.states {
+    	stroke: #fff;
+		  stroke-width:1px;
+		}
+.states:hover{
+  stroke: #ff9933;
+  stroke-width:1px;
+}
+body {
+	 font-family: optima;
+	 border: solid;
+
+}
+.tooltip {
+
+
+}
+#area1 {
+	padding: 100px;
+	padding-bottom: 50px: 
+	border: dashed;
+
+}
+#area2 {
+	padding: 100px;
+	padding-bottom: 50px: 
+
+}

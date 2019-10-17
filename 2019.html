@@ -6,233 +6,264 @@
 		<script type="text/javascript" src="d3.js"></script> 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.13.0/d3-legend.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+		
+
 		<style type="text/css">
 			.states {
     	stroke: #fff;
 		  stroke-width:1px;
 		}
+
+    #hypothesis{
+ /*     border: dashed; */
+      padding: 20px;
+      font-size: 16px;
+    }
+
+    #intro {
+      padding: 30px;
+    }
+    
+    
+
 		.states:hover{
-		  stroke: #ff9933;
+		  stroke: black;
 		  stroke-width:1px;
+      opacity: .2;
 		}
 		body {
-			 font-family: optima;
-			 border: solid;
+			font-family: optima;
+      margin: 20px;
+      padding: 10px;
+		}
+		.tooltip { 
+      border: solid, 1px; 
+      position: absolute;
+      background-color: white;
+      width: 200px;
+      padding: 10px;
+ 
+		}
+    .tooltip2 {   
+      float: right;
+      border: solid;
+      border-color: #ff9900;
+    }
+
+		#area1 {
+			padding: 20px;
+    /*  border: dashed; */
+			padding-bottom: 0px: 
 
 		}
-		.tooltip {
-
+		#area2 {
+			padding: 20px;
+     /* border: dashed; */
+			padding-bottom: 50px: 
 
 		}
 
 		</style>
+		
+
 		</head>
-		<div> 	
-			<h2>Hypothesis: The percentage of women in U.S. state legislatures has increased since the general election in 2016.</h2>
-		<h1 style= "text-align: center;">2019</h1>
+		<div id="hypothesis"> 
+      <h1 style="text-align: center">Female Representation in State Legislatures</h1>	
+			<p>Hypothesis: The percentage of women in U.S. state legislatures has increased since the 2016 general election, but many states in 2019 have less than 35% women in their state legislatures.</p>
+      <p id="intro">There has been a lot of attention to the increase in Congressional gains in gender parity as a result of the 2018 Midterm election, but there has also been major gains in the state legislatures.  The state breakdown in 2019 as percentages is provided in the map below.</p>
 		</div>
-		<div id="area1"></div>
+		
+    <div id="area1" ></div>
+   
+    <div>
+      <p>*Nevada in 2019 is the first and only state legislature to have a female majority.</p>
+
+    </div>  
+
 		<div id="area2"></div>
 	<body>
 
-			<body>
+
 	
 
 
-		<script type="text/javascript">
+<script type="text/javascript">
 
-			//Width and height
+//Width and height
+var margin = {top: 30, right: 40, bottom: 30, left: 50},
+	w = 800 - margin.left - margin.right,
+	h = 500 - margin.top - margin.bottom;
 
-			var margin = {top: 30, right: 20, bottom: 30, left: 50},
-   			w = 800 - margin.left - margin.right,
-    		h = 500 - margin.top - margin.bottom;
+//Define map projection
+var projection = d3.geoAlbersUsa()
+	.translate([w/2-75, h/2])
+	.scale([750]);
 
-			//Define map projection
-			var projection = d3.geoAlbersUsa()
-								   .translate([w/2-120, h/2-60])
-								   .scale([550]);
+//Define path generator
+var path = d3.geoPath()
+	.projection(projection);
+				 
+//Define quantize scale to sort data values into buckets of color
 
-			//Define path generator
-			var path = d3.geoPath()
-							 .projection(projection);
-							 
-			//Define quantize scale to sort data values into buckets of color
+var color = d3.scaleQuantize()
+  .domain([10, 40])
+	.range(d3.schemeBlues[4]);
 			
-			var color = d3.scaleQuantize()
-	//		var color = d3.scaleThreshold()
-  			//	.domain([0, 10, 20, 30, 40, 50])
-  				.domain([10, 40])
-   				.range(d3.schemeBlues[4]);
-						
 
 
-				  //Create SVG element
-			var svg = d3.select("#area1")
-						.append("svg")
-						.attr("width", w + margin.left + margin.right)
-        		.attr("height", h + margin.top + margin.bottom)
-						.style("border", "dashed")
-						.attr("width", w)
-						.attr("height", h);
- 
+//Create SVG element
+var svg = d3.select("#area1")
+			.append("svg")
+			.attr("width", w + margin.left + margin.right)
+  		.attr("height", h + margin.top + margin.bottom)
+			.attr("width", w)
+			.attr("height", h);
+
+svg.append("text")
+  .attr("x", (w/2))             
+  .attr("y", (margin.top - 10))
+  .attr("text-anchor", "middle")  
+  .style("font-size", "24px") 
+  .text("2019");
 
 
-
-
-
-
-
-
-
-//Another take a legend
-
+//legend
 var legend = d3.legendColor()
 		.labelFormat(d3.format(".0f"))
     .shapeWidth(20)
     .cells(5)
     .labels(["< 25", "< 35", "< 45", "> 45"])
-		.title("Women in State Legislatures (%)")
+		.title("% Women")
     .orient("vertical")
     .scale(color)
 
 
 svg.append("g")
- // .attr("class", "legendSequential")
+  .attr("class", "legend")
   .call(legend)
-  .attr("transform", "translate(440, 60)");  
+  .attr("transform", "translate(540, 130)");  
 
 
+//tooltip for map 
+var tooltip1 = d3.select("#area1").append("div") 
+    .attr("class", "tooltip")       
+    .style("opacity", 0);
 
-		var tooltip = d3.select("body").append("div") 
-        .attr("class", "tooltip")       
-        .style("opacity", 0)
-        .style("background-color", "white")
-				//.style("border", "solid")
-				//.style("border-width", "2px")
-  			//.style("border-radius", "5px")
-      	.style("padding", "10px");
+// Three function that change the tooltip when user hover / move / leave a cell
+var mouseover = function(d) {
+  tooltip1
+    .style("opacity", 1)
+}
 
+var mousemove = function(d) {
+  tooltip1
+    .style("left", (d3.mouse(this)[0]) + 20 + "px")
+    .style("top", (d3.mouse(this)[1]) + 200+ "px")
+    .html( 
+    	(d.properties.name + ": " + d.properties.value + "%" )
+    )
+}	
 
+var mouseleave = function(d) {
+  tooltip1
+    .style("opacity", 0)
+}
 
-      	 // Three function that change the tooltip when user hover / move / leave a cell
-      var mouseover = function(d) {
-        tooltip
-          .style("opacity", 1)
-      }
+//Load in state data
+d3.csv("2019.csv", function(data) {
+/*
+	for (var i = 0; i < data.length; i++) {
+   console.log("state: " +data[i].state);
+   console.log("value: " + data[i].value);
+	}
+*/
+	//Set input domain for color scale
+	color.domain([
+		d3.min(data, function(d) { return d.value; }), 
+		d3.max(data, function(d) { return d.value; })
+	]);
 
-      var mousemove = function(d) {
-        tooltip
-          .html( 
-          	(d.properties.name + " " + d.properties.value + "%" )
-          )
-         	.style("left", (d3.mouse(this)[0]+50) + "px")
-        	.style("top", (d3.mouse(this)[1]) + "px")
-    		}	
+	//Load in GeoJSON data
+	d3.json("us-states.json", function(json) {
 
-      var mouseleave = function(d) {
-        tooltip
-          .style("opacity", 0)
-      }
-
-        
-
-
-
-
-
-			//Load in agriculture data
-			d3.csv("2019.csv", function(data) {
-
-
-				for (var i = 0; i < data.length; i++) {
-	        console.log("state: " +data[i].state);
-	        console.log("value: " + data[i].value);
-    		}
-
-				//Set input domain for color scale
-				color.domain([
-					d3.min(data, function(d) { return d.value; }), 
-					d3.max(data, function(d) { return d.value; })
-				]);
-
-				//Load in GeoJSON data
-				d3.json("us-states.json", function(json) {
-
-					//Merge the ag. data and GeoJSON
-					//Loop through once for each ag. data value
-					for (var i = 0; i < data.length; i++) {
-				
-						//Grab state name
-						var dataState = data[i].state;
+		//Merge the ag. data and GeoJSON
+		//Loop through once for each ag. data value
+		for (var i = 0; i < data.length; i++) {
 	
-						
-						//Grab data value, and convert from string to float
-						var dataValue = parseFloat(data[i].value);
-				
-						//Find the corresponding state inside the GeoJSON
-						for (var j = 0; j < json.features.length; j++) {
-						
-							var jsonState = json.features[j].properties.name;
-				
-							if (dataState == jsonState) {
-						
-								//Copy the data value into the JSON
-								json.features[j].properties.value = dataValue;
-								
-								//Stop looking through the JSON
-								break;
-								
-							}
-						}		
-					}
+			//Grab state name
+			var dataState = data[i].state;
 
-					//Bind data and create one path per GeoJSON feature
-					svg.selectAll("path")
-					   .data(json.features)
-					   .enter()
-					   .append("path")
-					   .attr("fill", "#66ccff")
-			        .on("mouseover", mouseover)
-			        .on("mousemove", mousemove)
-			        .on("mouseleave", mouseleave)
-					   .attr("d", path)
-					   .attr('class', 'states')
-					   .style("fill", function(d) {
-					   		//Get data value
-					   		var value = d.properties.value;
-					   		
-					   		if (value) {
-					   			//If value exists…
-
-					   			console.log("value: " + value);
-					   			console.log("color value: " + color(value));
-						   		return color(value);
-
-					   		} else {
-					   			//If value is undefined…
-						   		return "#ccc";
-					   		}
-
-					   	})
-	
- 				});
 			
-		});
+			//Grab data value, and convert from string to float
+			var dataValue = parseFloat(data[i].value);
+	
+			//Find the corresponding state inside the GeoJSON
+			for (var j = 0; j < json.features.length; j++) {
+			
+				var jsonState = json.features[j].properties.name;
+	
+				if (dataState == jsonState) {
+			
+					//Copy the data value into the JSON
+					json.features[j].properties.value = dataValue;
+					
+					//Stop looking through the JSON
+					break;
+					
+				}
+			}		
+		}
+
+//Bind data and create one path per GeoJSON feature
+svg.selectAll("path")
+   .data(json.features)
+   .enter()
+   .append("path")
+   .attr("fill", "#66ccff")
+    .on("mouseover", mouseover)
+    .on("mousemove", mousemove)
+    .on("mouseleave", mouseleave)
+   .attr("d", path)
+   .attr('class', 'states')
+   .style("fill", function(d) {
+   		//Get data value
+   		var value = d.properties.value;
+   		
+   		if (value) {
+   			//If value exists…
+
+   			console.log("value: " + value);
+   			console.log("color value: " + color(value));
+	   		return color(value);
+
+   		} else {
+   			//If value is undefined…
+	   		return "#ccc";
+   		}
+
+   	})
+
+  });
+
+});
 
 
 
+//reset width and height for second chart
+margin = {top: 40, right: 40, bottom: 30, left: 50},
+w = 450 + margin.left + margin.right,
+h = 300 + margin.top + margin.bottom;
 
 
 
 // Adds the svg canvas
 var svg2 = d3.select("#area2")
     .append("svg")
-    	.style("border", "dashed")
-        .attr("width", w+ margin.left + margin.right)
+    //	.style("border", "dashed")
+        .attr("width", w + margin.left + margin.right)
         .attr("height", h + margin.top + margin.bottom)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
 
 
 
@@ -256,9 +287,11 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
    // Add X axis
   var x = d3.scaleLinear()
     .domain([2009, 2019])
-    .range([ 0, w ]);
+    .range([0, w]);
+  //  .range([ 0, (2 * w / 3)  ]);
   svg2.append("g")
-    .attr("transform", "translate(0," + h + ")")
+    .attr("transform", "translate(0," + h   + ")")
+  //  .attr("transform", "translate(0," + (2 * h/ 3)   + ")")
     .call(d3.axisBottom(x)
       .tickFormat(d3.format("d"))); 
 
@@ -267,7 +300,7 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
     // Add Y axis
     var y = d3.scaleLinear()
       .domain( [23, 29])
-      .range([ h, 0 ]);
+      .range([h, 0]);
     svg2.append("g")
       .call(d3.axisLeft(y)
         .tickFormat(d => d + "%"));
@@ -286,11 +319,11 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
 
       svg2.append("rect")
       .attr("fill", "#ff9900")
-      .style("opacity", .4)
+      .style("opacity", .2)
       .attr("width", 52)
-      .attr("height", 400)
-      .attr("x", 515)
-      .attr("y", 1) 
+      .attr("height", 300)
+      .attr("x", 490)
+      .attr("y", 70) 
 
       svg2.append("text")
    .attr("x", 515)             
@@ -300,41 +333,42 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
         .style("font-family", "optima") 
         .text("Midterm Election");
 
-
-  svg2.append("rect")
+svg2.append("rect")
       .attr("fill", "#ff9900")
-      .style("opacity", .4)
+      .style("opacity", .2)
       .attr("width", 54)
-      .attr("height", 400)
-      .attr("x", 400)
-      .attr("y", 1) 
+      .attr("height", 300)
+      .attr("x", 380)
+      .attr("y", 70) 
 
-      svg2.append("text")
-   .attr("x", 400)             
-        .attr("y", 0 - (margin.top - 140))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "12px") 
-        .style("font-family", "optima") 
-        .text("General Election");
+svg2.append("text")
+  .attr("x", 400)             
+  .attr("y", 0 - (margin.top - 140))
+  .attr("text-anchor", "middle")  
+  .style("font-size", "12px") 
+  .style("font-family", "optima") 
+  .text("General Election");
     // create a tooltip
-    var tooltip = d3.select("#area2")
-      .append("div")
+    
+    var tooltip2 = d3.select("#area2")
+      .append("table")
+      .attr("class", "tooltip2")
       .style("opacity", 0)
-      .attr("class", "tooltip")
       .style("background-color", "white")
-      .style("border", "solid")
-      .style("border-width", "2px")
-      .style("border-radius", "5px")
+    //  .style("border", "solid")
       .style("padding", "10px")
 
+
       // Three function that change the tooltip when user hover / move / leave a cell
-      var mouseover = function(d) {
-        tooltip
+      var mouseover2 = function(d) {
+        tooltip2
           .style("opacity", 1)
       }
-      var mousemove = function(d) {
-        tooltip
-          .html("Year: " + d.year + "<br/>"
+      var mousemove2 = function(d) {
+        tooltip2
+     //   .style("left", (d3.mouse(this)[0]+100) + "px")
+     //   .style("top", (d3.mouse(this)[1]+100) + "px")
+        .html("Year: " + d.year + "<br/>"
             + "Women in State Legislatures: " + d.percent_women + '%' + "<br/>" 
             + "Party Breakdown of Female State Legislators:" + "<br/>" 
             + " Democrats: " + d.per_dem + '%' + "<br/>" 
@@ -342,11 +376,10 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
             + " Third Party: " + d.per_third + '%' + "<br/>"  
             + " Nonpartisan: " + d.per_nonpartisan + '%'   
             )
-          .style("left", (d3.mouse(this)[0]+100) + "px")
-          .style("top", (d3.mouse(this)[1]) + "px")
       }
-      var mouseleave = function(d) {
-        tooltip
+
+      var mouseleave2 = function(d) {
+        tooltip2
           .style("opacity", 0)
       }
    
@@ -362,9 +395,9 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
         .attr("cy", function(d) { return y(d.percent_women) } )
         .attr("r", 5)
         .attr("fill", "#6baed6")
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave) 
+        .on("mouseover", mouseover2)
+        .on("mousemove", mousemove2)
+        .on("mouseleave", mouseleave2) 
 
 		})	
 			
@@ -372,23 +405,9 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
 
 
 
+<div>
+		<p style="text-align: right">Data Source: <a href="http://www.ncsl.org/legislators-staff/legislators/womens-legislative-network.aspx">National Conference of State Legislatures</a></p>
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		<p>Data Source: <a href="http://www.ncsl.org/legislators-staff/legislators/womens-legislative-network.aspx">National Conference of State Legislatures</a></p>
 	</body>
 </html>
