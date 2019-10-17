@@ -23,9 +23,7 @@
     #intro {
       padding: 30px;
     }
-    
-    
-
+      
 		.states:hover{
 		  stroke: black;
 		  stroke-width:1px;
@@ -46,7 +44,7 @@
 		}
     .tooltip2 {   
       float: right;
-      border: solid;
+      border: 1px solid;
       border-color: #ff9900;
     }
 
@@ -92,7 +90,7 @@
 //Width and height
 var margin = {top: 30, right: 40, bottom: 30, left: 50},
 	w = 800 - margin.left - margin.right,
-	h = 500 - margin.top - margin.bottom;
+	h = 700 - margin.top - margin.bottom;
 
 //Define map projection
 var projection = d3.geoAlbersUsa()
@@ -141,7 +139,7 @@ var legend = d3.legendColor()
 svg.append("g")
   .attr("class", "legend")
   .call(legend)
-  .attr("transform", "translate(540, 130)");  
+  .attr("transform", "translate(600, 130)");  
 
 
 //tooltip for map 
@@ -250,7 +248,7 @@ svg.selectAll("path")
 
 
 //reset width and height for second chart
-margin = {top: 40, right: 40, bottom: 30, left: 50},
+margin = {top: 40, right: 40, bottom: 20, left: 40},
 w = 450 + margin.left + margin.right,
 h = 300 + margin.top + margin.bottom;
 
@@ -276,7 +274,7 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
 	      //  console.log("percent: " + data[i].percent_women);
     		}
     //title text 
-  svg2.append("text")
+svg2.append("text")
         .attr("x", (w/2))             
         .attr("y", (margin.top ))
         .attr("text-anchor", "middle")  
@@ -285,11 +283,11 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
         .text("Total Women in State Legislatures (2009-2019)");
 
    // Add X axis
-  var x = d3.scaleLinear()
+var x = d3.scaleLinear()
     .domain([2009, 2019])
     .range([0, w]);
   //  .range([ 0, (2 * w / 3)  ]);
-  svg2.append("g")
+svg2.append("g")
     .attr("transform", "translate(0," + h   + ")")
   //  .attr("transform", "translate(0," + (2 * h/ 3)   + ")")
     .call(d3.axisBottom(x)
@@ -298,16 +296,16 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
 
 
     // Add Y axis
-    var y = d3.scaleLinear()
+var y = d3.scaleLinear()
       .domain( [23, 29])
       .range([h, 0]);
-    svg2.append("g")
+svg2.append("g")
       .call(d3.axisLeft(y)
         .tickFormat(d => d + "%"));
 
 
       // Add the line
-    svg2.append("path")
+svg2.append("path")
       .datum(data)
       .attr("fill", "none")
       .attr("stroke", "#6baed6")
@@ -317,7 +315,7 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
         .y(function(d) { return y(d.percent_women) })
           )
 
-      svg2.append("rect")
+svg2.append("rect")
       .attr("fill", "#ff9900")
       .style("opacity", .2)
       .attr("width", 52)
@@ -325,7 +323,7 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
       .attr("x", 490)
       .attr("y", 70) 
 
-      svg2.append("text")
+svg2.append("text")
    .attr("x", 515)             
         .attr("y", 0 - (margin.top - 140))
         .attr("text-anchor", "middle")  
@@ -348,6 +346,10 @@ svg2.append("text")
   .style("font-size", "12px") 
   .style("font-family", "optima") 
   .text("General Election");
+    
+
+
+
     // create a tooltip
     
     var tooltip2 = d3.select("#area2")
@@ -370,11 +372,11 @@ svg2.append("text")
      //   .style("top", (d3.mouse(this)[1]+100) + "px")
         .html("Year: " + d.year + "<br/>"
             + "Women in State Legislatures: " + d.percent_women + '%' + "<br/>" 
-            + "Party Breakdown of Female State Legislators:" + "<br/>" 
-            + " Democrats: " + d.per_dem + '%' + "<br/>" 
-            + " Republicans: " + d.per_repub + '%' + "<br/>"
-            + " Third Party: " + d.per_third + '%' + "<br/>"  
-            + " Nonpartisan: " + d.per_nonpartisan + '%'   
+            + "------- Female Legislature Party Breakdown" +  "<br/>" 
+            + "Democrats: " + d.per_dem + '%' + "<br/>" 
+            + "Republicans: " + d.per_repub + '%' + "<br/>"
+            + "Third Party: " + d.per_third + '%' + "<br/>"  
+            + "Nonpartisan: " + d.per_nonpartisan + '%'   
             )
       }
 
