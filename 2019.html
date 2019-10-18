@@ -21,7 +21,7 @@
     }
 
     #intro {
-      padding: 30px;
+
     }
       
 		.states:hover{
@@ -49,17 +49,20 @@
     }
 
 		#area1 {
-			padding: 20px;
-    /*  border: dashed; */
+		/*	padding: 20px; */
+      border: dashed; 
 			padding-bottom: 0px: 
 
 		}
 		#area2 {
-			padding: 20px;
+		/*	padding: 20px;
      /* border: dashed; */
 			padding-bottom: 50px: 
 
 		}
+    h1 {
+      font-size: 24px;
+    }
 
 		</style>
 		
@@ -67,7 +70,7 @@
 		</head>
 		<div id="hypothesis"> 
       <h1 style="text-align: center">Female Representation in State Legislatures</h1>	
-			<p>Hypothesis: The percentage of women in U.S. state legislatures has increased since the 2016 general election, but many states in 2019 have less than 35% women in their state legislatures.</p>
+			<p><b>Hypothesis:</b> The percentage of women in U.S. state legislatures has increased since the 2016 general election.</p>
       <p id="intro">There has been a lot of attention to the increase in Congressional gains in gender parity as a result of the 2018 Midterm election, but there has also been major gains in the state legislatures.  The state breakdown in 2019 as percentages is provided in the map below.</p>
 		</div>
 		
@@ -89,13 +92,13 @@
 
 //Width and height
 var margin = {top: 30, right: 40, bottom: 30, left: 50},
-	w = 800 - margin.left - margin.right,
-	h = 700 - margin.top - margin.bottom;
+	w = 650 - margin.left - margin.right,
+	h = 350 - margin.top - margin.bottom;
 
 //Define map projection
 var projection = d3.geoAlbersUsa()
-	.translate([w/2-75, h/2])
-	.scale([750]);
+	.translate([w/2-50, h/2])
+	.scale([600]);
 
 //Define path generator
 var path = d3.geoPath()
@@ -139,7 +142,7 @@ var legend = d3.legendColor()
 svg.append("g")
   .attr("class", "legend")
   .call(legend)
-  .attr("transform", "translate(600, 130)");  
+  .attr("transform", "translate(420, 130)");  
 
 
 //tooltip for map 
@@ -249,9 +252,8 @@ svg.selectAll("path")
 
 //reset width and height for second chart
 margin = {top: 40, right: 40, bottom: 20, left: 40},
-w = 450 + margin.left + margin.right,
-h = 300 + margin.top + margin.bottom;
-
+w = 300 + margin.left + margin.right,
+h = 230 + margin.top + margin.bottom;
 
 
 // Adds the svg canvas
@@ -278,7 +280,7 @@ svg2.append("text")
         .attr("x", (w/2))             
         .attr("y", (margin.top ))
         .attr("text-anchor", "middle")  
-        .style("font-size", "24px") 
+        .style("font-size", "18px") 
         .style("font-family", "optima") 
         .text("Total Women in State Legislatures (2009-2019)");
 
