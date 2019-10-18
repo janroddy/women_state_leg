@@ -34,6 +34,7 @@
       margin: 20px;
       padding: 10px;
 		}
+    /*
 		.tooltip { 
       border: solid, 1px; 
       position: absolute;
@@ -42,6 +43,7 @@
       padding: 10px;
  
 		}
+    */
     .tooltip2 {   
       float: right;
       border: 1px solid;
@@ -50,7 +52,7 @@
 
 		#area1 {
 		/*	padding: 20px; */
-      border: dashed; 
+    /*  border: dashed; */
 			padding-bottom: 0px: 
 
 		}
@@ -71,7 +73,7 @@
 		<div id="hypothesis"> 
       <h1 style="text-align: center">Female Representation in State Legislatures</h1>	
 			<p><b>Hypothesis:</b> The percentage of women in U.S. state legislatures has increased since the 2016 general election.</p>
-      <p id="intro">There has been a lot of attention to the increase in Congressional gains in gender parity as a result of the 2018 Midterm election, but there has also been major gains in the state legislatures.  The state breakdown in 2019 as percentages is provided in the map below.</p>
+      <p id="intro">There has been a lot of attention to the increase in Congressional gains in gender parity as a result of the 2018 Midterm election, but there has also been major gains in the state legislatures.</p>
 		</div>
 		
     <div id="area1" ></div>
@@ -278,7 +280,7 @@ d3.csv("national_totals_national_totals_with_party_breakdown.csv",
     //title text 
 svg2.append("text")
         .attr("x", (w/2))             
-        .attr("y", (margin.top ))
+        .attr("y", (margin.top -20 ))
         .attr("text-anchor", "middle")  
         .style("font-size", "18px") 
         .style("font-family", "optima") 
@@ -320,13 +322,13 @@ svg2.append("path")
 svg2.append("rect")
       .attr("fill", "#ff9900")
       .style("opacity", .2)
-      .attr("width", 52)
+      .attr("width", 30)
       .attr("height", 300)
-      .attr("x", 490)
+      .attr("x", 325)
       .attr("y", 70) 
 
 svg2.append("text")
-   .attr("x", 515)             
+   .attr("x", 350)             
         .attr("y", 0 - (margin.top - 140))
         .attr("text-anchor", "middle")  
         .style("font-size", "12px") 
@@ -336,14 +338,14 @@ svg2.append("text")
 svg2.append("rect")
       .attr("fill", "#ff9900")
       .style("opacity", .2)
-      .attr("width", 54)
+      .attr("width", 30)
       .attr("height", 300)
-      .attr("x", 380)
+      .attr("x", 250)
       .attr("y", 70) 
 
 svg2.append("text")
-  .attr("x", 400)             
-  .attr("y", 0 - (margin.top - 140))
+  .attr("x", 280)             
+  .attr("y", 0 - (margin.top - 180))
   .attr("text-anchor", "middle")  
   .style("font-size", "12px") 
   .style("font-family", "optima") 
@@ -368,6 +370,7 @@ svg2.append("text")
         tooltip2
           .style("opacity", 1)
       }
+
       var mousemove2 = function(d) {
         tooltip2
      //   .style("left", (d3.mouse(this)[0]+100) + "px")
