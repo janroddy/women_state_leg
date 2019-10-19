@@ -81,8 +81,8 @@
     
     #area3 {
       border: solid; 
-      width: 300px;
-      height: 300px;
+      width: 450px;
+      height: 400px;
       float: right;
    }
    
@@ -97,22 +97,49 @@
 		
     <div id="hypothesis"> 
       <h1 style="text-align: center">Gains in Female Representation in State Legislatures from 2018 Midterm Election</h1>	
-			<p><b>Hypothesis:</b> The percentage of women in U.S. state legislatures has increased since the 2016 general election.</p>
+			<p><b>Hypothesis:</b>The 2018 Midterm election resulted in increases in percentage of women in state legislatures due to high voter turnout and record numbers of women running for office.</p>
 		</div>
 
 		<div id="context">
       <p>There has been a lot of attention to the increase in Congressional gains in gender parity as a result of the 2018 Midterm election, but there has also been major gains in the state legislatures.</p>
-      <p>In 2018 <b>3,564</b> female candidates ran for office.</p>
-      <p>In 2016 <b>2,265</b> woman ran for office.</p>
+      <p>In 2014 <b>2,521</b> woman ran for state legislature.</p>
+      <p>In 2016 <b>2,649</b> woman ran for state legislature.</p>
+      <p>In 2018 <b>3,418</b> woman ran for state legislature.</p>
 
+
+       <p style="text-align: center">Midterm Voter Turnout by Gender</p>
+      <table>
+         <tr>
+    <th>Year</th>
+    <th>Total</th>
+    <th>Female</th>
+    <th>Male</th>
+  </tr>
+  <tr>
+    <td>2014</td>
+    <td>41.9</td>
+    <td>43.0</td>
+    <td>40.8</td>
+  </tr>
+  <tr>
+    <td>2018</td>
+    <td>53.4</td>
+    <td>55.0</td>
+    <td>51.8</td>
+  </tr>
+      </table>
     </div>
     
     <div id="area1" >
     </div>
     
-    <p id="nevada">* in 2019 Nevada becomes the first and only state legislature to have a female majority.</p>
-    
-    <div id="area3"></div>
+    <p id="nevada">* Nevada is the first and only state legislature to have a female majority.</p>
+    <p>Midterm election turnout</p>
+    <div id="area3">
+ 
+
+
+    </div>
 		
     <div id="area2"></div>
 
@@ -161,8 +188,8 @@ svg.append("text")
   .attr("x", (w/2))             
   .attr("y", (margin.top - 17))
   .attr("text-anchor", "middle")  
-  .style("font-size", "18px") 
-  .text("Difference in Female Representation in State Legislatures 2019");
+  .style("font-size", "16px") 
+  .text("Difference in Female Representation in State Legislatures from 2018 to 2019");
 
 
 //legend
@@ -335,7 +362,7 @@ svg2.append("text")
         .attr("x", (w/2))             
         .attr("y", (margin.top -20 ))
         .attr("text-anchor", "middle")  
-        .style("font-size", "18px") 
+        .style("font-size", "16px") 
         .style("font-family", "optima") 
         .text("Total Women in State Legislatures (2009-2019)");
 
@@ -460,13 +487,139 @@ svg2.append("text")
         .on("mouseleave", mouseleave2) 
 
     })  
+
+
+
+
+
+
+// Adds the svg canvas
+var svg3 = d3.select("#area3")
+    .append("svg")
+    //  .style("border", "dashed")
+        .attr("width", w + margin.left + margin.right)
+        .attr("height", h + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.csv("turnout.csv",
+  
+  function(data) {
+/*
+        for (var i = 0; i < data.length; i++) {
+         console.log("year: " + data[i].year);
+         console.log("percent: " + data[i].percent);
+        }  
+*/
+
+       // Add X axis
+var x = d3.scaleLinear()
+    .domain([1988, 2018])
+    .range([0, w]);
+  //  .range([ 0, (2 * w / 3)  ]);
+svg3.append("g")
+    .attr("transform", "translate(0," + h   + ")")
+  //  .attr("transform", "translate(0," + (2 * h/ 3)   + ")")
+    .call(d3.axisBottom(x)
+      .tickFormat(d3.format("d"))); 
+
+
+
+    // Add Y axis
+var y = d3.scaleLinear()
+      .domain( [35, 62])
+      .range([h, 0]);
+svg3.append("g")
+      .call(d3.axisLeft(y)
+        .tickFormat(d => d + "%"));
+
+svg3.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "#3182bd")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.year) })
+        .y(function(d) { return y(d.percent) })
+          )     
+  // Add the points
+    svg3
+      .append("g")     
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+        .attr("cx", function(d) { return x(d.year) } )
+        .attr("cy", function(d) { return y(d.percent) } )
+        .attr("r", 4)
+        .attr("fill", "#3182bd")
+})
+
+
+  d3.csv("general_turnout.csv",
+
+    function(data) {
+
+        for (var i = 0; i < data.length; i++) {
+         console.log("year: " + data[i].year);
+         console.log("percent: " + data[i].percent);
+        } 
+
+              // Add X axis
+var x = d3.scaleLinear()
+    .domain([1988, 2018])
+    .range([0, w]);
+  //  .range([ 0, (2 * w / 3)  ]);
+svg3.append("g")
+    .attr("transform", "translate(0," + h   + ")")
+  //  .attr("transform", "translate(0," + (2 * h/ 3)   + ")")
+    .call(d3.axisBottom(x)
+      .tickFormat(d3.format("d"))); 
+
+
+
+    // Add Y axis
+var y = d3.scaleLinear()
+      .domain( [35, 62])
+      .range([h, 0]);
+svg3.append("g")
+      .call(d3.axisLeft(y)
+        .tickFormat(d => d + "%"));
+
+svg3.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke",  "orange")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.year) })
+        .y(function(d) { return y(d.percent) })
+          )      
+
+        // Add the points
+    svg3
+      .append("g")     
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+        .attr("cx", function(d) { return x(d.year) } )
+        .attr("cy", function(d) { return y(d.percent) } )
+        .attr("r", 4)
+        .attr("fill", "orange");
+
+})
+
 			
 	</script>
 
 
 
 <div id="dataSource">
-		<p style="text-align: right">Data Source: <a href="http://www.ncsl.org/legislators-staff/legislators/womens-legislative-network.aspx">National Conference of State Legislatures</a></p>
+		<p style="text-align: right">Data Sources: <a href="http://www.ncsl.org/legislators-staff/legislators/womens-legislative-network.aspx">National Conference of State Legislatures</a>
+      <br/>
+      <a href="https://www.census.gov/library/stories/2019/04/behind-2018-united-states-midterm-election-turnout.html">Census.gov</a>
+    </p>
 </div>
 
 	</body>
