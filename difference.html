@@ -31,7 +31,7 @@
     }
     #dataSource{
       font-family: Veranda;
-      font-size: 14px;
+      font-size: 12px;
     }
       
 		.states:hover{
@@ -52,9 +52,35 @@
       padding: 10px;
       float: right; 
       border: 1px solid;
-      border-color: #ff9900;
+      border-color: orange;
  
 		}
+    
+    #nevada {
+      font-family: Veranda ;
+      font-color: #808080;
+      font-size: 12px;
+    }
+    #turnout_table {
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 70%;
+      text-align: center;
+    }
+
+    #turnout_table th{
+      padding-top: 8px;
+      padding-bottom: 8px;
+      text-align: left;
+      background-color: orange;
+      color: white;
+
+    }
+
+    #turnout_table td, #turnout_table th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
     
     .tooltip2 {   
       font-family: Georgia;
@@ -106,8 +132,9 @@
       <p><span style="color: orange; font-weight:bold; font-size: 20px">3,418</span> women ran for state legislature in 2018 which is nearly <b>1000</b> more than the last midterm election in 2014.</p>
 
 
-       <p style="text-align: center">Midterm Voter Turnout by Gender</p>
-      <table>
+       <p style="text-align: left;
+      padding: 0px;"><b>Midterm Voter Turnout by Gender (%)</b></p>
+      <table id="turnout_table">
          <tr>
     <th>Year</th>
     <th>Total</th>
@@ -133,7 +160,7 @@
     </div>
     
     <p id="nevada">* Nevada is the first and only state legislature to have a female majority.</p>
-    <p>Midterm election turnout</p>
+  
     <div id="area3">
  
 
