@@ -25,7 +25,7 @@
     #context {
       float: right;
     /*  border: dashed; */
-      width: 500px;
+      width: 450px;
       height: 300px;
 
     }
@@ -62,15 +62,15 @@
       font-size: 12px;
     }
     #turnout_table {
-      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
       border-collapse: collapse;
-      width: 70%;
+      width: 60%;
+      font-size: 14px;
       text-align: center;
     }
 
     #turnout_table th{
-      padding-top: 8px;
-      padding-bottom: 8px;
+      padding-top: 4px;
+      padding-bottom: 4px;
       text-align: left;
       background-color: orange;
       color: white;
@@ -107,7 +107,7 @@
     
     #area3 {
      /* border: solid; */
-      width: 450px;
+      width: 480px;
       height: 400px;
       float: right;
    }
@@ -123,11 +123,11 @@
 		
     <div id="hypothesis"> 
       <h1 style="text-align: center">Gains in Female Representation in State Legislatures from 2018 Midterm Election</h1>	
-			<p><b>Hypothesis:</b>The 2018 Midterm election resulted in increases in percentage of women in state legislatures due to high voter turnout and record numbers of women running for office.</p>
+			<p><b>Hypothesis: </b>Percentages of Women in State legislatures increased due to the high voter turnout and record number of women running for office in the 2018 Midterm election.</p>
 		</div>
 
 		<div id="context">
-      <p>There has been a lot of attention to the increase in Congressional gains in gender parity as a result of the 2018 Midterm election, but there has also been major gains in the state legislatures.</p>
+      <p>The November 2018 Midterm election is widely reported as the <span style="color: #6baed6; font-weight:bold; font-size: 18px">"Year of the Woman"</span> due to the unprecedented number of women elected to public office.</p>
 
       <p><span style="color: orange; font-weight:bold; font-size: 20px">3,418</span> women ran for state legislature in 2018 which is nearly <b>1000</b> more than the last midterm election in 2014.</p>
 
@@ -191,12 +191,8 @@ var projection = d3.geoAlbersUsa()
 //Define path generator
 var path = d3.geoPath()
 	.projection(projection);
-				 
-//Define quantize scale to sort data values into buckets of color
-/*var color = d3.scaleQuantize()
-  .domain([-2, 15 ])
-	.range(d3.schemeBlues[5])
-*/			
+
+//define threshold scale				 		
 var color = d3.scaleThreshold()
   .domain([0, 4, 8, 12])
  // .range(["#eff3ff", "#bdd7e7", "#6baed6", "#3182bd","#08519c"]);
@@ -223,13 +219,13 @@ svg.append("text")
 //legend
 var legend = d3.legendColor()
 	//	.labelFormat(d3.format(".0f"))
-    .shapeWidth(15)
-    .cells(5)
-    .labels(["Less than 0", "0 to 4", "4 to 8 ", "8 to 12", "12 or more"])
-		.title("Change (%)")
+  .shapeWidth(15)
+  .cells(5)
+  .labels(["Less than 0", "0 to 4", "4 to 8 ", "8 to 12", "12 or more"])
+	.title("Change (%)")
    // .titleWidth(100)
-    .orient("vertical")
-    .scale(color)
+  .orient("vertical")
+  .scale(color)
 
 
 svg.append("g")
@@ -238,7 +234,7 @@ svg.append("g")
   .attr("transform", "translate(450, 130)");  
 
 
-//tooltip for map 
+//tooltip for area1 
 var tooltip1 = d3.select("#area1").append("div") 
     .attr("class", "tooltip1")       
     .style("opacity", 0);
@@ -255,9 +251,9 @@ var mousemove = function(d) {
     .style("top", (d3.mouse(this)[1]) + 200+ "px")
     .html( 
     	(d.properties.name + "-" + "<br/>" 
-      +  "Difference between 2018 to 2019: " + d.properties.value + "%" + "<br/>"
-      +"Women in state Legislature 2018 : " + d.properties.percent2 + "%" + "<br/>"
-      +"Women in state Legislature 2019 : " + d.properties.percent + "%")
+      +  "Change from 2018 to 2019: " + d.properties.value + "%" + "<br/>"
+      +"Women in 2018 : " + d.properties.percent2 + "%" + "<br/>"
+      +"Women in 2019 : " + d.properties.percent + "%")
     )
 }	
 
@@ -284,7 +280,7 @@ d3.csv("difference.csv", function(data) {
 	//Load in GeoJSON data
 	d3.json("us-states.json", function(json) {
 
-		//Merge the state leg. data and GeoJSON
+		//Merge the state leg. data and GeoJSON data
 		//Loop through once for each leg. data value
 		for (var i = 0; i < data.length; i++) {
 	
