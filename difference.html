@@ -24,7 +24,7 @@
 
     #context {
       float: right;
-      border: dashed;
+    /*  border: dashed; */
       width: 500px;
       height: 300px;
 
@@ -66,21 +66,21 @@
 		#area1 {
 		/*	padding: 20px; */
       float: ;
-      border: dashed; 
+    /*  border: dashed; */
       width: 600px;
 			padding-bottom: 0px: 
 
 		}
 		#area2 {
 		/*	padding: 20px; */
-      border: dashed; 
+    /*  border: dashed;  */
       width: 500px;
       height: 500px;
 
 		}
     
     #area3 {
-      border: solid; 
+     /* border: solid; */
       width: 450px;
       height: 400px;
       float: right;
@@ -102,9 +102,8 @@
 
 		<div id="context">
       <p>There has been a lot of attention to the increase in Congressional gains in gender parity as a result of the 2018 Midterm election, but there has also been major gains in the state legislatures.</p>
-      <p>In 2014 <b>2,521</b> woman ran for state legislature.</p>
-      <p>In 2016 <b>2,649</b> woman ran for state legislature.</p>
-      <p>In 2018 <b>3,418</b> woman ran for state legislature.</p>
+
+      <p><span style="color: orange; font-weight:bold; font-size: 20px">3,418</span> women ran for state legislature in 2018 which is nearly <b>1000</b> more than the last midterm election in 2014.</p>
 
 
        <p style="text-align: center">Midterm Voter Turnout by Gender</p>
@@ -189,6 +188,8 @@ svg.append("text")
   .attr("y", (margin.top - 17))
   .attr("text-anchor", "middle")  
   .style("font-size", "16px") 
+  .style("font-family", "Palatino") 
+  .style("font-weight", "bold")  
   .text("Difference in Female Representation in State Legislatures from 2018 to 2019");
 
 
@@ -364,7 +365,9 @@ svg2.append("text")
         .attr("text-anchor", "middle")  
         .style("font-size", "16px") 
         .style("font-family", "optima") 
-        .text("Total Women in State Legislatures (2009-2019)");
+        .style("font-family", "Palatino") 
+        .style("font-weight", "bold") 
+        .text("Total Women in State Legislatures");
 
    // Add X axis
 var x = d3.scaleLinear()
@@ -453,6 +456,7 @@ svg2.append("text")
 
       var mousemove2 = function(d) {
         tooltip2
+
      //   .style("left", (d3.mouse(this)[0]+100) + "px")
      //   .style("top", (d3.mouse(this)[1]+100) + "px")
         .html("Year: " + d.year + "<br/>"
@@ -501,6 +505,18 @@ var svg3 = d3.select("#area3")
         .attr("height", h + margin.top + margin.bottom)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    //title text 
+svg3.append("text")
+        .attr("x", (w/2))             
+        .attr("y", (margin.top - 40))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("font-family", "Palatino") 
+        .style("font-weight", "bold") 
+        .text("Voter Turnout");
+
+
 
   d3.csv("turnout.csv",
   
@@ -607,6 +623,24 @@ svg3.append("path")
         .attr("cy", function(d) { return y(d.percent) } )
         .attr("r", 4)
         .attr("fill", "orange");
+
+  var ordinal = d3.scaleOrdinal()
+    .domain(["Midterm", "General"])
+    .range([ "orange", "#3182bd"])  
+
+
+  svg3.append("g")
+    .attr("class", "legendOrdinal")
+    .attr("transform", "translate(330,4)"); 
+
+  var legendOrdinal = d3.legendColor()
+    .shape("path", d3.symbol().type(d3.symbolCircle).size(120)())
+    .shapePadding(10)
+    .scale(ordinal);
+
+  svg3.select(".legendOrdinal")
+    .call(legendOrdinal);
+
 
 })
 
